@@ -13,7 +13,7 @@ There are two phases:
 - The training phase (offline)
 - The competing phase (online)
 
-The training phase works by making the bot play the game repeatedly against itself. During this process, it builds a tree of states, discerning desirable states from undesirable ones. Once the training phase is complete, we save the result to disk and use it for competing.
+The training phase works by making the bot play the game repeatedly against itself. During this process, it builds a tree of states, discerning desirable states from undesirable ones. Once the training phase is complete, we save the result to disk and use it for competing against other bots (or puny humans).
 
 
 ## Setup
@@ -30,11 +30,14 @@ pause
 ```
 
 #### 2. Running the bot with the java engine
-Place the bot directory in the fourinarow-engine directory, the use the following command to run it:
+1. Place the bot directory in the fourinarow-engine directory.
+2. Navigate to that directory.
+3. Run ```npm install```
+4. Use the following command to run the engine:
 ```
 java -classpath classes com.theaigames.fourinarow.FourInARow "node bot" "node bot"
 ```
-Notice that there are two instances of the bot, playing against each other.
+The engine uses standard I/O to communicate with the bots. Notice that there are two instances of the bot running because it's a two player game.
 
 #### 3. Bot output
 This snippet helps with viewing the bot's output for debugging. Add it to the saveGame() function in AbstractGame.java file:

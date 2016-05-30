@@ -1,16 +1,14 @@
-"use strict";
+'use strict';
 
 let fs = require('fs');
 let readline = require('readline');
 let commands = require('./commands');
-let log = require('./log');
 
-fs.stat('bot.log', function(err, stat) {
+fs.stat('bot.log', err => {
     if (!err) {
         fs.unlinkSync('bot.log');
     }
 });
-
 
 let io = readline.createInterface(process.stdin, process.stdout);
 
@@ -24,7 +22,7 @@ io.on('line', data => {
 
     lines.forEach(line => {
         let response;
-        let lineParts = line.trim().split(" ");
+        let lineParts = line.trim().split(' ');
         let command = lineParts.shift().toLowerCase();
         if (commands[command]) {
             response = commands[command](lineParts);

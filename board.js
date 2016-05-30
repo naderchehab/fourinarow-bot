@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-class Model {
+class Board {
     constructor(settings, field) {
         this.timebank = settings.timebank;
         this.timePerMove = parseInt(settings.time_per_move, 10);
@@ -12,7 +12,6 @@ class Model {
         this.field = field;
     }
 
-
     getLegalMoves(columns) {
         let legalColumns = [];
         for (let col = 0; col < this.fieldColumns; col++) {
@@ -23,13 +22,11 @@ class Model {
         return legalColumns;
     }
 
-    placeDisc(column) {
-        return "place_disc " + column;
-    }
-
     getColumns() {
+        let columns = [];
+
         if (!this.field || this.field.length === 0) {
-            return;
+            return columns;
         }
 
         let rows = this.field.split(';');
@@ -38,8 +35,6 @@ class Model {
             let row = cells.map(cell => parseInt(cell, 10));
             return row;
         });
-
-        let columns = [];
 
         for (let col = 0; col < this.fieldColumns; col++) {
             let column = [];
@@ -56,4 +51,4 @@ class Model {
     }
 }
 
-module.exports = Model;
+module.exports = Board;
