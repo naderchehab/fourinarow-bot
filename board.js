@@ -9,45 +9,31 @@ class Board {
         this.yourBotId = settings.your_bot_id;
         this.fieldColumns = parseInt(settings.field_columns, 10);
         this.fieldRows = parseInt(settings.field_rows, 10);
-        this.field = field;
+        this.field = this.getFieldArray(field)
     }
 
-    getLegalMoves(columns) {
+    getFieldArray(field) {
+        return field.split(/[,;]+/g).map(char => parseInt(char, 10));
+    }
+
+    getLegalMoves() {
         let legalColumns = [];
-        for (let col = 0; col < this.fieldColumns; col++) {
-            if (columns[col].length < this.fieldRows) {
-                legalColumns.push(col);
+        for (let i = 0; i < this.fieldColumns; i++) {
+            if (this.field[i] === 0) {
+                legalColumns.push(i);
             }
         }
         return legalColumns;
     }
 
-    getColumns() {
-        let columns = [];
-
-        if (!this.field || this.field.length === 0) {
-            return columns;
-        }
-
-        let rows = this.field.split(';');
-        let matrix = rows.map(rowStr => {
-            let cells = rowStr.split(',');
-            let row = cells.map(cell => parseInt(cell, 10));
-            return row;
-        });
-
-        for (let col = 0; col < this.fieldColumns; col++) {
-            let column = [];
-            for (let row = 0; row < this.fieldRows; row++) {
-                let cell = matrix[row][col];
-                if (cell !== 0) {
-                    column.push(cell);
-                }
+    placeDisc(player, column) {
+        for (let i = this.fieldRows; i > 0; i--) {
+            let index = i * this.fieldColumns - (this.fieldColumns - column);
+            if (this.field[index] === 0) {
+                this.field[index] = player;
+                return;
             }
-            columns.push(column);
         }
-
-        return columns;
     }
 }
 

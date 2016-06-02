@@ -5,7 +5,9 @@ class Bot {
 
     }
     train() {
-
+        // loop 1000 times
+            // play one game
+                // play one turn against another bot
     }
     getMove() {
         return 0;
