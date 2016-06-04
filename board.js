@@ -35,21 +35,6 @@ class Board {
         return Math.round(((index / fieldColumns) % 1) * fieldColumns);
     }
 
-    static arrayHasFourInARow(arr) {
-        let counter = 1;
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === arr[i + 1]) {
-                counter++;
-            } else {
-                counter = 1;
-            }
-            if (counter === 4) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     clear() {
         this.field = _.times(this.fieldColumns * this.fieldRows, _.constant(0));
     }
@@ -83,24 +68,72 @@ class Board {
     }
 
     checkWin() {
-        let result = false;
-        for (let i = 0; i < this.fieldRows; i = i + this.fieldColumns) {
-            let row = this.field.slice(i, i + this.fieldColumns);
-            if (Board.arrayHasFourInARow(row)) {
-                result = true;
-                break;
+        return this._checkRows() || this._checkColumns() || this._checkDiaglonals();
+    }
+
+    _checkRows() {
+        let counter;
+        for (let i = 0; i < this.fieldRows; i++) {
+            counter = 0;
+            for (let j = 1; j < this.fieldColumns; j++) {
+                let rowIndex = i * this.fieldColumns;
+                let index = rowIndex + j;
+                if (this.field[index] === this.field[index - 1]) {
+                    counter++;
+                } else {
+                    counter = 0;
+                }
+                if (counter === 3 && this.field[index] !== 0) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
 
+    _checkColumns() {
+        let counter;
         for (let i = 0; i < this.fieldColumns; i++) {
-            let column = []; // TODO
-            if (Board.arrayHasFourInARow(column)) {
-                result = true;
-                break;
+            counter = 0;
+            for (let j = 1; j < this.fieldRows; j++) {
+                let rowIndex = j * this.fieldColumns;
+                let index = rowIndex + i;
+                if (this.field[index] === this.field[index - this.fieldColumns]) {
+                    counter++;
+                } else {
+                    counter = 0;
+                }
+                if (counter === 3 && this.field[index] !== 0) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
 
-        return result;
+    _checkDiaglonals() {
+        for (let i = 0; i < this.field.length / 2; i++) {
+            if (this._checkDiagonal(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    _checkDiagonal(i) {
+        let counter = 0;
+        while (typeof this.field[i] !== 'undefined') {
+            if (this.field[i] === this.field[i + this.fieldColumns + 1]) {
+                counter++;
+            } else {
+                counter = 0;
+            }
+            if (counter === 3 && this.field[i] !== 0) {
+                return true;
+            }
+            i += this.fieldColumns + 1;
+        }
+        return false;
     }
 }
 

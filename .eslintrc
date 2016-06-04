@@ -75,7 +75,6 @@
     "no-new-wrappers": 2, // disallows creating new instances of String,Number, and Boolean
     "no-octal": 2, // disallow use of octal literals
     "no-octal-escape": 2, // disallow use of octal escape sequences in string literals, such as var foo = "Copyright \251";
-    "no-param-reassign": 2, // disallow reassignment of function parameters (off by default)
     "no-process-env": 2, // disallow use of process.env (off by default)
     "no-proto": 2, // disallow usage of __proto__ property
     "no-redeclare": 2, // disallow declaring the same variable more then once
@@ -144,7 +143,6 @@
     "no-spaced-func": 1, // disallow space between function identifier and application
     "no-ternary": 0, // disallow the use of ternary operators (off by default)
     "one-var": [1, "never"], // allow just one var statement per function (off by default)
-    "operator-assignment": [1, "never"], // require assignment operator shorthand where possible or prohibit it entirely (off by default)
     "padded-blocks": [1, "never"], // enforce padding within blocks (off by default)
     "quote-props": [1, "as-needed"], // require quotes around object literal property names (off by default)
     "quotes": [1, "single"], // specify whether double or single quotes should be used
