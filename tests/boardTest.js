@@ -168,4 +168,23 @@ describe('Board Test', function() {
         assert(column === 5);
         done();
     });
+
+    it('should be able to determine whether an array has four in a row', function(done) {
+        let arr = [1, 2, 3, 4, 5, 6];
+        assert(Board.arrayHasFourInARow(arr) === false);
+
+        arr = [1, 2, 3, 3, 3, 3];
+        assert(Board.arrayHasFourInARow(arr) === true);
+
+        arr = [1, 2, 3, 3, 3, 3, 3, 3, 3];
+        assert(Board.arrayHasFourInARow(arr) === true);
+
+        arr = [1, 1, 1, 1, 3, 3, 3, 3, 3];
+        assert(Board.arrayHasFourInARow(arr) === true);
+
+        arr = [0, 4, 4, 4, 2, 2, 3, 3, 3];
+        assert(Board.arrayHasFourInARow(arr) === false);
+
+        done();
+    });
 });

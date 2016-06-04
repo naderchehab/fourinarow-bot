@@ -6,33 +6,33 @@ let Board = require('./board');
 class Bot {
     constructor() {
         Bot.numTrainingGames = 1000;
+        this.states = [];
     }
 
     // TODO: adapt tic-tac-toe strategy below to fourinarow
 
-    train(board, states) {
-
+    train(board) {
         for (let i = 0; i < Bot.numTrainingGames; i++) {
             this._playOneGame(board);
             board.clear();
         }
 
-        console.log("Number of states:", Object.keys(states).length);
+        console.log("Number of states:", Object.keys(this.states).length);
     }
 
     _playOneGame(board) {
         board.clear();
 
-        while (board.get("gameEnded") === false) {
+        while (board.gameEnded === false) {
             this._play(board);
-            _recordState(board);
+            this._recordState(board);
             board.nextPlayer();
         }
     }
 
     _play(board) {
-        var isExploration = Math.random() < explorationRatio;
-        var cellNumber = getMove(board);
+        let isExploration = Math.random() < explorationRatio;
+        let cellNumber = this.getMove(board);
 
         if (!cellNumber || isExploration) {
             cellNumber = TicTacToe.RandomStrategy.getMove(board);
@@ -42,11 +42,8 @@ class Bot {
     }
 
     _recordState(board) {
-        var xMarks = board.get("xMarks");
-        var oMarks = board.get("oMarks");
-        var currentPlayer = board.get("currentPlayer");
-        var currentState =  xMarks + "-" + oMarks;
-        states[currentState] = states[currentState] || {visits: 0, value: 0};
+        let currentState = board.getFieldAsString();
+        this.states[currentState] = this.states[currentState] || {visits: 0, value: 0};
 
         if (board.checkWin()) {
             if (currentPlayer === "x") {

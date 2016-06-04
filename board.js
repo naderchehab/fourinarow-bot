@@ -12,6 +12,7 @@ class Board {
         this.fieldColumns = parseInt(settings.field_columns, 10);
         this.fieldRows = parseInt(settings.field_rows, 10);
         this.field = Board.getFieldArray(field);
+        this.gameEnded = false;
     }
 
     static getFieldArray(field) {
@@ -32,6 +33,21 @@ class Board {
 
     static getColumnFromIndex(index, fieldColumns) {
         return Math.round(((index / fieldColumns) % 1) * fieldColumns);
+    }
+
+    static arrayHasFourInARow(arr) {
+        let counter = 1;
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === arr[i + 1]) {
+                counter++;
+            } else {
+                counter = 1;
+            }
+            if (counter === 4) {
+                return true;
+            }
+        }
+        return false;
     }
 
     clear() {
@@ -64,6 +80,27 @@ class Board {
                 return;
             }
         }
+    }
+
+    checkWin() {
+        let result = false;
+        for (let i = 0; i < this.fieldRows; i = i + this.fieldColumns) {
+            let row = this.field.slice(i, i + this.fieldColumns);
+            if (Board.arrayHasFourInARow(row)) {
+                result = true;
+                break;
+            }
+        }
+
+        for (let i = 0; i < this.fieldColumns; i++) {
+            let column = []; // TODO
+            if (Board.arrayHasFourInARow(column)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 }
 

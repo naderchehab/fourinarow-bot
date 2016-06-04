@@ -143,7 +143,6 @@
     "no-new-object": 1, // disallow use of the Object constructor
     "no-spaced-func": 1, // disallow space between function identifier and application
     "no-ternary": 0, // disallow the use of ternary operators (off by default)
-    "no-underscore-dangle": 1, // disallow dangling underscores in identifiers
     "one-var": [1, "never"], // allow just one var statement per function (off by default)
     "operator-assignment": [1, "never"], // require assignment operator shorthand where possible or prohibit it entirely (off by default)
     "padded-blocks": [1, "never"], // enforce padding within blocks (off by default)
