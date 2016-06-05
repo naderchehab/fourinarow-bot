@@ -4,6 +4,8 @@ let _ = require('lodash');
 
 class Board {
     constructor(settings, field) {
+        this.settings = settings;
+        this.fieldString = field;
         this.timebank = settings.timebank;
         this.timePerMove = parseInt(settings.time_per_move, 10);
         this.playerNames = settings.player_names;
@@ -44,7 +46,7 @@ class Board {
     }
 
     clone() {
-        return new Board(this.settings, this.getFieldAsString());
+        return new Board(this.settings, this.fieldString);
     }
 
     getLegalMoves() {
@@ -69,6 +71,26 @@ class Board {
 
     checkWin() {
         return this._checkRows() || this._checkColumns() || this._checkDiaglonals();
+    }
+
+    checkDraw() {
+        for (let i = 0; i < this.fieldColumns; i++) {
+            if (this.field[i] === 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    nextPlayer() {
+        if (this.yourBotId === 1) {
+            this.yourBotId = 2;
+            this.yourBot = 'player2';
+        }
+        else {
+            this.yourBotId = 1;
+            this.yourBot = 'player1';
+        }
     }
 
     _checkRows() {

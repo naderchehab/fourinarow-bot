@@ -6,7 +6,10 @@ let Board = require('./board');
 class Bot {
     constructor() {
         Bot.numTrainingGames = 1000;
+        Bot.tdStepSize = 0.8;
+        Bot.explorationRatio = 0.4;
         this.states = [];
+        this.previousState;
     }
 
     // TODO: adapt tic-tac-toe strategy below to fourinarow
@@ -31,41 +34,43 @@ class Bot {
     }
 
     _play(board) {
-        let isExploration = Math.random() < explorationRatio;
-        let cellNumber = this.getMove(board);
+        let isExploration = Math.random() < Board.explorationRatio;
+        let colIndex = this.getMove(board);
 
-        if (!cellNumber || isExploration) {
-            cellNumber = TicTacToe.RandomStrategy.getMove(board);
+        if (!colIndex || isExploration) {
+            colIndex = _.random(0, board.fieldColumns);
         }
 
-        board.markCell(cellNumber);
+        board.placeDisc(colIndex);
     }
 
     _recordState(board) {
         let currentState = board.getFieldAsString();
         this.states[currentState] = this.states[currentState] || {visits: 0, value: 0};
 
-        if (board.checkWin()) {
-            if (currentPlayer === "x") {
-                states[currentState].value = 100;
+        let hasWinner = board.checkWin();
+
+        if (hasWinner) {
+            if (this.yourBotId === 1) {
+                this.states[currentState].value = 100;
             }
             else {
-                states[currentState].value = -100;
+                this.states[currentState].value = -100;
             }
         }
 
         // Temporal Difference (TD) Learning
-        if (previousState) {
-            states[previousState].visits++;
-            states[previousState].value = states[previousState].value + (STEP_SIZE/states[previousState].visits) * (states[currentState].value - states[previousState].value);
+        if (this.previousState) {
+            this.states[this.previousState].visits++;
+            this.states[this.previousState].value = this.states[this.previousState].value + (Bot.tdStepSize/this.states[this.previousState].visits) * (this.states[currentState].value - this.states[this.previousState].value);
         }
 
-        if (board.getLegalMoves().length === 0) {
-            board.set("gameEnded", true);
-            previousState = undefined;
+        if (hasWinner || board.getLegalMoves().length === 0) {
+            board.gameEnded = true;
+            this.previousState = undefined;
         }
         else {
-            previousState = currentState;
+            this.previousState = currentState;
         }
     }
 

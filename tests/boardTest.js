@@ -1,7 +1,7 @@
 'use strict';
 
 let assert = require('assert');
-let Board = require('../board.js');
+let Board = require('../board');
 
 let settings = {
     timebank: '10000',
@@ -389,6 +389,43 @@ describe('Board Test', function() {
 
         board = new Board(settings, field);
         assert(board._checkDiaglonals() === true);
+
+        done();
+    });
+
+    it('should be able to determine whether the board has a draw', function(done) {
+        let field =
+            '0,0,0,1,0,0,0;' +
+            '0,0,0,2,0,0,0;' +
+            '0,0,0,1,0,0,0;' +
+            '0,0,0,1,0,0,0;' +
+            '0,0,0,2,0,2,0;' +
+            '0,0,0,1,0,1,0';
+
+        let board = new Board(settings, field);
+        assert(board.checkDraw() === false);
+
+        field =
+            '1,1,1,1,1,1,0;' +
+            '2,2,2,2,0,2,1;' +
+            '0,0,0,1,0,1,2;' +
+            '0,0,0,1,0,1,1;' +
+            '0,0,0,2,0,2,2;' +
+            '0,0,0,1,0,1,1';
+
+        board = new Board(settings, field);
+        assert(board.checkDraw() === false);
+
+        field =
+            '1,1,1,1,1,1,1;' +
+            '2,2,2,2,0,2,1;' +
+            '0,0,0,1,0,1,2;' +
+            '0,0,0,1,0,1,1;' +
+            '0,0,0,2,0,2,2;' +
+            '0,0,0,1,0,1,1';
+
+        board = new Board(settings, field);
+        assert(board.checkDraw() === true);
 
         done();
     });
