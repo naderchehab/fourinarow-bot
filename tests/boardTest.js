@@ -41,21 +41,20 @@ describe('Board Test', function() {
             '0,0,0,1,0,1,0';
 
         let board = new Board(settings, field);
-        let player = board.yourBotId;
         let column = 2;
 
-        board.placeDisc(player, column);
-        assert(board.field[37] === player);
+        board.placeDisc(column);
+        assert(board.field[37] === board.yourBotId);
 
-        board.placeDisc(player, column);
-        assert(board.field[30] === player);
+        board.placeDisc(column);
+        assert(board.field[30] === board.yourBotId);
 
-        board.placeDisc(player, column);
-        assert(board.field[23] === player);
+        board.placeDisc(column);
+        assert(board.field[23] === board.yourBotId);
 
         column = 1;
-        board.placeDisc(player, column);
-        assert(board.field[36] === player);
+        board.placeDisc(column);
+        assert(board.field[36] === board.yourBotId);
 
         done();
     });

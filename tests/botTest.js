@@ -27,6 +27,7 @@ describe('Bot Test', function() {
         let board = new Board(settings, field);
         let bot = new Bot();
         bot.train(board);
+        console.log(board.field)
         done();
     });
 });

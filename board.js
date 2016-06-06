@@ -5,7 +5,6 @@ let _ = require('lodash');
 class Board {
     constructor(settings, field) {
         this.settings = settings;
-        this.fieldString = field;
         this.timebank = settings.timebank;
         this.timePerMove = parseInt(settings.time_per_move, 10);
         this.playerNames = settings.player_names;
@@ -13,11 +12,12 @@ class Board {
         this.yourBotId = parseInt(settings.your_botid, 10);
         this.fieldColumns = parseInt(settings.field_columns, 10);
         this.fieldRows = parseInt(settings.field_rows, 10);
-        this.field = Board.getFieldArray(field);
+        this.field = Array.isArray(field) ? field : Board.getFieldArray(field);
         this.gameEnded = false;
     }
 
     static getFieldArray(field) {
+        field = field[0] === 'A' ? field.substring(1) : field;
         return field.split(/[,;]+/g).map(char => parseInt(char, 10));
     }
 
@@ -46,7 +46,7 @@ class Board {
     }
 
     clone() {
-        return new Board(this.settings, this.fieldString);
+        return new Board(this.settings, this.field.slice());
     }
 
     getLegalMoves() {
@@ -59,11 +59,11 @@ class Board {
         return legalColumns;
     }
 
-    placeDisc(player, column) {
+    placeDisc(column) {
         for (let i = this.fieldRows; i > 0; i--) {
             let index = i * this.fieldColumns - (this.fieldColumns - column);
             if (this.field[index] === 0) {
-                this.field[index] = player;
+                this.field[index] = this.yourBotId;
                 return;
             }
         }
