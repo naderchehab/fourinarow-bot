@@ -15,7 +15,8 @@ let settings = {
 };
 
 describe('Bot Test', function() {
-    it('should be able to train a bot', function(done) {
+    it('should be able to train a bot and save the result', function(done) {
+        this.timeout(200000);
         let field =
             '0,0,0,0,0,0,0;' +
             '0,0,0,0,0,0,0;' +
@@ -27,7 +28,11 @@ describe('Bot Test', function() {
         let board = new Board(settings, field);
         let bot = new Bot();
         bot.train(board);
-        console.log(board.field)
+        bot.save("trainedBot.json", () => {
+            console.log('Number of states saved:', Object.keys(bot.states).length);
+            bot.load("trainedBot.json");
+            console.log('Number of states loaded:', Object.keys(bot.states).length);
+        });
         done();
     });
 });

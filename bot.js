@@ -1,11 +1,12 @@
 'use strict';
 
+let fs = require('fs');
 let _ = require('lodash');
 let Board = require('./board');
 
 class Bot {
     constructor() {
-        Bot.numTrainingGames = 1000000;
+        Bot.numTrainingGames = 100000;
         Bot.tdStepSize = 0.8;
         Bot.explorationRatio = 0.4;
         this.states = {};
@@ -17,10 +18,21 @@ class Bot {
     train(board) {
         for (let i = 0; i < Bot.numTrainingGames; i++) {
             this._playOneGame(board);
-            board.clear();
         }
+    }
 
-        console.log('Number of states:', Object.keys(this.states).length);
+    save(path, callback) {
+        fs.writeFile(path, JSON.stringify(this.states), (err) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log('File saved.');
+            return callback();
+        });
+    }
+
+    load(path) {
+        this.states = require('./' + path);
     }
 
     _playOneGame(board) {

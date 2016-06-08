@@ -5,13 +5,13 @@ let _ = require('lodash');
 class Board {
     constructor(settings, field) {
         this.settings = settings;
-        this.timebank = settings.timebank;
-        this.timePerMove = parseInt(settings.time_per_move, 10);
-        this.playerNames = settings.player_names;
-        this.yourBot = settings.your_bot;
-        this.yourBotId = parseInt(settings.your_botid, 10);
-        this.fieldColumns = parseInt(settings.field_columns, 10);
-        this.fieldRows = parseInt(settings.field_rows, 10);
+        this.timebank = this.settings.timebank;
+        this.timePerMove = parseInt(this.settings.time_per_move, 10);
+        this.playerNames = this.settings.player_names;
+        this.yourBot = this.settings.your_bot;
+        this.yourBotId = parseInt(this.settings.your_botid, 10);
+        this.fieldColumns = parseInt(this.settings.field_columns, 10);
+        this.fieldRows = parseInt(this.settings.field_rows, 10);
         this.field = Array.isArray(field) ? field : Board.getFieldArray(field);
         this.gameEnded = false;
     }
@@ -38,6 +38,7 @@ class Board {
     }
 
     clear() {
+        this.gameEnded = false;
         this.field = _.times(this.fieldColumns * this.fieldRows, _.constant(0));
     }
 
@@ -90,6 +91,17 @@ class Board {
         else {
             this.yourBotId = 1;
             this.yourBot = 'player1';
+        }
+    }
+
+    print() {
+        let row = '';
+        for (let i = 0; i < this.field.length; i++) {
+            row += this.field[i] + ' ';
+            if ((i + 1) % this.fieldColumns === 0) {
+                console.log(row);
+                row = '';
+            }
         }
     }
 
