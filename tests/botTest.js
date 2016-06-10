@@ -2,7 +2,7 @@
 
 let assert = require('assert');
 let Board = require('../board');
-let Bot = require('../')
+let Bot = require('../').Bot;
 
 let settings = {
     timebank: '10000',

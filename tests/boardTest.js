@@ -1,7 +1,7 @@
 'use strict';
 
 let assert = require('assert');
-let Board = require('../board');
+let Board = require('../').Board;
 
 let settings = {
     timebank: '10000',
