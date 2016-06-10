@@ -1,7 +1,7 @@
 {
   "name": "fourinarow-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bot that uses Reinforcement Learning to learn how to play Four-In-A-Row.",
   "main": "bot.js",
   "scripts": {
     "test": "mocha tests"
@@ -9,7 +9,6 @@
   "author": "Nader Chehab",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.13.1",
-    "readline": "^1.3.0"
+    "lodash": "^4.13.1"
   }
 }
