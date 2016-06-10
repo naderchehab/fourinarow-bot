@@ -5,19 +5,22 @@ let _ = require('lodash');
 let Board = require('./board');
 
 class Bot {
-    constructor() {
-        Bot.numTrainingGames = 100000;
-        Bot.tdStepSize = 0.8;
-        Bot.explorationRatio = 0.4;
+    constructor(options) {
+        Bot.numTrainingGames = _.get(options, 'numTrainingGames') || 100000;
+        Bot.tdStepSize = _.get(options, 'tdStepSize') || 0.8;
+        Bot.explorationRatio = _.get(options, 'explorationRatio') || 0.4;
         this.states = {};
         this.previousState = undefined;
     }
 
     // TODO: adapt tic-tac-toe strategy below to fourinarow
 
-    train(board) {
+    train(board, callback) {
         for (let i = 0; i < Bot.numTrainingGames; i++) {
             this._playOneGame(board);
+        }
+        if (callback) {
+            callback();
         }
     }
 

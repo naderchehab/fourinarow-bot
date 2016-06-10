@@ -4,6 +4,15 @@ let _ = require('lodash');
 
 class Board {
     constructor(settings, field) {
+
+        field = field ||
+            '0,0,0,0,0,0,0;' +
+            '0,0,0,0,0,0,0;' +
+            '0,0,0,0,0,0,0;' +
+            '0,0,0,0,0,0,0;' +
+            '0,0,0,0,0,0,0;' +
+            '0,0,0,0,0,0,0';
+
         this.settings = settings;
         this.timebank = this.settings.timebank;
         this.timePerMove = parseInt(this.settings.time_per_move, 10);
