@@ -1,6 +1,6 @@
 {
   "name": "fourinarow-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Bot that uses Reinforcement Learning to learn how to play Four-In-A-Row.",
   "main": "index.js",
   "scripts": {
