@@ -38,6 +38,33 @@ class Bot {
         this.states = require('./' + path);
     }
 
+    getMove(board) {
+        let legalMoves = board.getLegalMoves();
+        let nextStates = [];
+
+        legalMoves.forEach(move => {
+            let tmpBoard = board.clone();
+            tmpBoard.placeDisc(move);
+            nextStates.push(tmpBoard.getFieldAsString());
+        });
+
+        let bestState;
+
+        if (board.yourBotId === 1) {
+            bestState = _.maxBy(nextStates, s => (this.states[s] && this.states[s].value));
+        } else {
+            bestState = _.minBy(nextStates, s => (this.states[s] && this.states[s].value));
+        }
+
+        if (!bestState) {
+            return undefined;
+        }
+
+        let move = Board.getMoveFromStateDiff(Board.getFieldArray(bestState), board.field, board.fieldColumns);
+
+        return move;
+    }
+
     _playOneGame(board) {
         board.clear();
 
@@ -88,33 +115,6 @@ class Bot {
         } else {
             this.previousState = currentState;
         }
-    }
-
-    getMove(board) {
-        let legalMoves = board.getLegalMoves();
-        let nextStates = [];
-
-        legalMoves.forEach(move => {
-            let tmpBoard = board.clone();
-            tmpBoard.placeDisc(move);
-            nextStates.push(tmpBoard.getFieldAsString());
-        });
-
-        let bestState;
-
-        if (board.yourBotId === 1) {
-            bestState = _.maxBy(nextStates, s => (this.states[s] && this.states[s].value));
-        } else {
-            bestState = _.minBy(nextStates, s => (this.states[s] && this.states[s].value));
-        }
-
-        if (!bestState) {
-            return undefined;
-        }
-
-        let move = Board.getMoveFromStateDiff(Board.getFieldArray(bestState), board.field, board.fieldColumns);
-
-        return move;
     }
 }
 
