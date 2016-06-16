@@ -25,7 +25,7 @@ describe('Bot Test', function() {
             '0,0,0,0,0,0,0;' +
             '0,0,0,0,0,0,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         let bot = new Bot();
         bot.train(board);
         bot.save("trainedBot.json", () => {

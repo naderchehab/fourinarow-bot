@@ -3,30 +3,35 @@
 let _ = require('lodash');
 
 class Board {
-    constructor(settings, field) {
-
-        field = field ||
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,0,0,0,0';
-
+    constructor(settings, winNum, field) {
         this.settings = settings;
+        this.fieldColumns = parseInt(this.settings.field_columns, 10);
+        this.fieldRows = parseInt(this.settings.field_rows, 10);
+        field = field || Board.createEmptyField(this.fieldColumns, this.fieldRows);
         this.timebank = this.settings.timebank;
         this.timePerMove = parseInt(this.settings.time_per_move, 10);
         this.playerNames = this.settings.player_names;
         this.yourBot = this.settings.your_bot;
         this.yourBotId = parseInt(this.settings.your_botid, 10);
-        this.fieldColumns = parseInt(this.settings.field_columns, 10);
-        this.fieldRows = parseInt(this.settings.field_rows, 10);
         this.field = Array.isArray(field) ? field : Board.getFieldArray(field);
+        this.winNum = winNum;
         this.gameEnded = false;
     }
 
+    static createEmptyField(fieldColumns, fieldRows) {
+        let rows = [];
+        let row = _.times(fieldColumns, _.constant(0)).join(',');
+        for (let i = 0; i < fieldRows; i++) {
+            rows.push(row);
+        }
+        return rows.join(';');
+    }
+
     static getFieldArray(field) {
-        field = field[0] === 'A' ? field.substring(1) : field;
+        if (field[0] === 'A') {
+            field = field.substring(1);
+            return field.split('').map(char => parseInt(char, 10));
+        }
         return field.split(/[,;]+/g).map(char => parseInt(char, 10));
     }
 
@@ -56,7 +61,7 @@ class Board {
     }
 
     clone() {
-        return new Board(this.settings, this.field.slice());
+        return new Board(this.settings, this.winNum, this.field.slice());
     }
 
     getLegalMoves() {
@@ -126,7 +131,7 @@ class Board {
                 } else {
                     counter = 0;
                 }
-                if (counter === 3 && this.field[index] !== 0) {
+                if (counter === this.winNum - 1 && this.field[index] !== 0) {
                     return true;
                 }
             }
@@ -146,7 +151,7 @@ class Board {
                 } else {
                     counter = 0;
                 }
-                if (counter === 3 && this.field[index] !== 0) {
+                if (counter === this.winNum - 1 && this.field[index] !== 0) {
                     return true;
                 }
             }
@@ -171,7 +176,7 @@ class Board {
             } else {
                 counter = 0;
             }
-            if (counter === 3 && this.field[i] !== 0) {
+            if (counter === this.winNum - 1 && this.field[i] !== 0) {
                 return true;
             }
             i += this.fieldColumns + 1;

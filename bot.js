@@ -13,9 +13,8 @@ class Bot {
         this.previousState = undefined;
     }
 
-    // TODO: adapt tic-tac-toe strategy below to fourinarow
-
     train(board, callback) {
+        this.states = {};
         for (let i = 0; i < Bot.numTrainingGames; i++) {
             this._playOneGame(board);
         }
@@ -46,14 +45,15 @@ class Bot {
             let tmpBoard = board.clone();
             tmpBoard.placeDisc(move);
             nextStates.push(tmpBoard.getFieldAsString());
+            //console.log(tmpBoard.getFieldAsString(), this.states[tmpBoard.getFieldAsString()]);
         });
 
         let bestState;
 
         if (board.yourBotId === 1) {
-            bestState = _.maxBy(nextStates, s => (this.states[s] && this.states[s].value));
+            bestState = _.maxBy(nextStates, s => this.states[s] && this.states[s].value);
         } else {
-            bestState = _.minBy(nextStates, s => (this.states[s] && this.states[s].value));
+            bestState = _.minBy(nextStates, s => this.states[s] && this.states[s].value);
         }
 
         if (!bestState) {
@@ -76,7 +76,7 @@ class Bot {
     }
 
     _play(board) {
-        let isExploration = Math.random() < Board.explorationRatio;
+        let isExploration = Math.random() < Bot.explorationRatio;
         let colIndex = this.getMove(board);
 
         if (!colIndex || isExploration) {
@@ -89,7 +89,7 @@ class Bot {
     _recordState(board) {
         let currentState = board.getFieldAsString();
         this.states[currentState] = this.states[currentState] || {
-            visits: 0,
+            visits: 1,
             value: 0
         };
 

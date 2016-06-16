@@ -23,7 +23,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         let legalMoves = board.getLegalMoves();
         let correctLegalMoves = [0, 1, 2, 4, 5, 6];
         let arraysMatch = (legalMoves.length === correctLegalMoves.length) && legalMoves.every((element, index) => element === correctLegalMoves[index]);
@@ -40,7 +40,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         let column = 2;
 
         board.placeDisc(column);
@@ -68,7 +68,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         let column;
 
         column = Board.getColumnFromIndex(41, board.fieldColumns);
@@ -130,8 +130,8 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board1 = new Board(settings, field1);
-        let board2 = new Board(settings, field2);
+        let board1 = new Board(settings, 4, field1);
+        let board2 = new Board(settings, 4, field2);
 
         let column = Board.getMoveFromStateDiff(board1.field, board2.field, board1.fieldColumns);
         assert(column === 5);
@@ -147,7 +147,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
@@ -158,7 +158,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
@@ -169,7 +169,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
@@ -180,7 +180,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,1,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
@@ -191,7 +191,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,1,1,2';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
@@ -202,7 +202,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,1,1,2';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
@@ -213,7 +213,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,1,1,2';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
@@ -224,7 +224,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,1,1,2';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         done();
@@ -239,7 +239,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
@@ -250,7 +250,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
@@ -261,7 +261,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,1;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
@@ -272,7 +272,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,1;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
@@ -283,7 +283,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,2;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
@@ -294,7 +294,7 @@ describe('Board Test', function() {
             '2,0,0,2,0,2,2;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
@@ -305,7 +305,7 @@ describe('Board Test', function() {
             '2,0,0,1,0,2,2;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         done();
@@ -320,7 +320,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
@@ -331,7 +331,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
@@ -342,7 +342,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,1,0;' +
             '0,0,0,1,0,1,0';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
@@ -353,7 +353,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,1,0;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         field =
@@ -364,7 +364,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,1,0;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
@@ -375,7 +375,7 @@ describe('Board Test', function() {
             '0,0,1,2,0,0,0;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         field =
@@ -386,7 +386,7 @@ describe('Board Test', function() {
             '0,0,1,2,0,0,0;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         done();
@@ -401,7 +401,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,0;' +
             '0,0,0,1,0,1,0';
 
-        let board = new Board(settings, field);
+        let board = new Board(settings, 4, field);
         assert(board.checkDraw() === false);
 
         field =
@@ -412,7 +412,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,2;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board.checkDraw() === false);
 
         field =
@@ -423,7 +423,7 @@ describe('Board Test', function() {
             '0,0,0,2,0,2,2;' +
             '0,0,0,1,0,1,1';
 
-        board = new Board(settings, field);
+        board = new Board(settings, 4, field);
         assert(board.checkDraw() === true);
 
         done();
