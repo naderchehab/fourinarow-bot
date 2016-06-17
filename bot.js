@@ -96,7 +96,7 @@ class Bot {
         let hasWinner = board.checkWin();
 
         if (hasWinner) {
-            if (this.yourBotId === 1) {
+            if (board.yourBotId === 1) {
                 this.states[currentState].value = 100;
             } else {
                 this.states[currentState].value = -100;

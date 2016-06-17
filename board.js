@@ -82,6 +82,7 @@ class Board {
                 return;
             }
         }
+
     }
 
     checkWin() {
@@ -117,6 +118,7 @@ class Board {
                 row = '';
             }
         }
+        console.log("");
     }
 
     _checkRows() {
