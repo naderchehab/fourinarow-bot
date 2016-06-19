@@ -389,6 +389,17 @@ describe('Board Test', function() {
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
+        field =
+            '0,0,0,0,0,0,0;' +
+            '2,2,2,2,0,0,0;' +
+            '0,0,0,0,1,0,0;' +
+            '0,0,0,1,0,0,0;' +
+            '0,0,1,2,0,1,0;' +
+            '0,1,0,1,0,1,1';
+
+        board = new Board(settings, 4, field);
+        assert(board._checkDiaglonals() === true);
+
         done();
     });
 

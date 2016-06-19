@@ -61,7 +61,10 @@ class Board {
     }
 
     clone() {
-        return new Board(this.settings, this.winNum, this.field.slice());
+        let copy = new Board(this.settings, this.winNum, this.field.slice());
+        copy.yourBot = this.yourBot;
+        copy.yourBotId = this.yourBotId;
+        return copy;
     }
 
     getLegalMoves() {
@@ -79,10 +82,10 @@ class Board {
             let index = i * this.fieldColumns - (this.fieldColumns - column);
             if (this.field[index] === 0) {
                 this.field[index] = this.yourBotId;
-                return;
+                return true;
             }
         }
-
+        return false;
     }
 
     checkWin() {
@@ -163,7 +166,7 @@ class Board {
 
     _checkDiaglonals() {
         for (let i = 0; i < this.field.length / 2; i++) {
-            if (this._checkDiagonal(i)) {
+            if (this._checkDiagonal(i) || this._checkBackwardsDiagonal(i)) {
                 return true;
             }
         }
@@ -182,6 +185,22 @@ class Board {
                 return true;
             }
             i += this.fieldColumns + 1;
+        }
+        return false;
+    }
+
+    _checkBackwardsDiagonal(i) {
+        let counter = 0;
+        while (typeof this.field[i] !== 'undefined') {
+            if         (i + this.fieldColumns - 1 >= 0 && this.field[i] === this.field[i + this.fieldColumns - 1]) {
+                counter++;
+            } else {
+                counter = 0;
+            }
+            if (counter === this.winNum - 1 && this.field[i] !== 0) {
+                return true;
+            }
+            i += this.fieldColumns - 1;
         }
         return false;
     }
