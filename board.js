@@ -2,6 +2,12 @@
 
 let _ = require('lodash');
 
+const emptyCell = 'X';
+const player1Id = 'a';
+const player1Name = 'player1';
+const player2Id = 'b';
+const player2Name = 'player2';
+
 class Board {
     constructor(settings, winNum, field) {
         this.settings = settings;
@@ -12,7 +18,7 @@ class Board {
         this.timePerMove = parseInt(this.settings.time_per_move, 10);
         this.playerNames = this.settings.player_names;
         this.yourBot = this.settings.your_bot;
-        this.yourBotId = parseInt(this.settings.your_botid, 10);
+        this.yourBotId = this.settings.your_botid;
         this.field = Array.isArray(field) ? field : Board.getFieldArray(field);
         this.winNum = winNum;
         this.gameEnded = false;
@@ -20,7 +26,7 @@ class Board {
 
     static createEmptyField(fieldColumns, fieldRows) {
         let rows = [];
-        let row = _.times(fieldColumns, _.constant(0)).join(',');
+        let row = _.times(fieldColumns, _.constant(emptyCell)).join(',');
         for (let i = 0; i < fieldRows; i++) {
             rows.push(row);
         }
@@ -28,17 +34,16 @@ class Board {
     }
 
     static getFieldArray(field) {
-        if (field[0] === 'A') {
-            field = field.substring(1);
-            return field.split('').map(char => parseInt(char, 10));
+        if (field.indexOf(',') === -1) {
+            return field.split('');
         }
-        return field.split(/[,;]+/g).map(char => parseInt(char, 10));
+        return field.split(/[,;]+/g);
     }
 
     static getMoveFromStateDiff(state1, state2, fieldColumns) {
         let retValue;
         for (let i = 0; i < state1.length; i++) {
-            let diff = state2[i] - state1[i];
+            let diff = state2[i].charCodeAt(0) - state1[i].charCodeAt(0);
             if (diff !== 0) {
                 retValue = Board.getColumnFromIndex(i, fieldColumns);
                 break;
@@ -53,11 +58,11 @@ class Board {
 
     clear() {
         this.gameEnded = false;
-        this.field = _.times(this.fieldColumns * this.fieldRows, _.constant(0));
+        this.field = _.times(this.fieldColumns * this.fieldRows, _.constant(emptyCell));
     }
 
     getFieldAsString() {
-        return 'A' + this.field.join('');
+        return this.field.join('');
     }
 
     clone() {
@@ -70,7 +75,7 @@ class Board {
     getLegalMoves() {
         let legalColumns = [];
         for (let i = 0; i < this.fieldColumns; i++) {
-            if (this.field[i] === 0) {
+            if (this.field[i] === emptyCell) {
                 legalColumns.push(i);
             }
         }
@@ -80,7 +85,7 @@ class Board {
     placeDisc(column) {
         for (let i = this.fieldRows; i > 0; i--) {
             let index = i * this.fieldColumns - (this.fieldColumns - column);
-            if (this.field[index] === 0) {
+            if (this.field[index] === emptyCell) {
                 this.field[index] = this.yourBotId;
                 return true;
             }
@@ -94,7 +99,7 @@ class Board {
 
     checkDraw() {
         for (let i = 0; i < this.fieldColumns; i++) {
-            if (this.field[i] === 0) {
+            if (this.field[i] === emptyCell) {
                 return false;
             }
         }
@@ -102,13 +107,13 @@ class Board {
     }
 
     nextPlayer() {
-        if (this.yourBotId === 1) {
-            this.yourBotId = 2;
-            this.yourBot = 'player2';
+        if (this.yourBotId === player1Id) {
+            this.yourBotId = player2Id;
+            this.yourBot = player2Name;
         }
         else {
-            this.yourBotId = 1;
-            this.yourBot = 'player1';
+            this.yourBotId = player1Id;
+            this.yourBot = player1Name;
         }
     }
 
@@ -116,12 +121,12 @@ class Board {
         let row = '';
         for (let i = 0; i < this.field.length; i++) {
             row += this.field[i] + ' ';
-            if ((i + 1) % this.fieldColumns === 0) {
+            if ((i + 1) % this.fieldColumns === emptyCell) {
                 console.log(row);
                 row = '';
             }
         }
-        console.log("");
+        console.log('');
     }
 
     _checkRows() {
@@ -136,7 +141,7 @@ class Board {
                 } else {
                     counter = 0;
                 }
-                if (counter === this.winNum - 1 && this.field[index] !== 0) {
+                if (counter === this.winNum - 1 && this.field[index] !== emptyCell) {
                     return true;
                 }
             }
@@ -156,7 +161,7 @@ class Board {
                 } else {
                     counter = 0;
                 }
-                if (counter === this.winNum - 1 && this.field[index] !== 0) {
+                if (counter === this.winNum - 1 && this.field[index] !== emptyCell) {
                     return true;
                 }
             }
@@ -181,7 +186,7 @@ class Board {
             } else {
                 counter = 0;
             }
-            if (counter === this.winNum - 1 && this.field[i] !== 0) {
+            if (counter === this.winNum - 1 && this.field[i] !== emptyCell) {
                 return true;
             }
             i += this.fieldColumns + 1;
@@ -192,12 +197,12 @@ class Board {
     _checkBackwardsDiagonal(i) {
         let counter = 0;
         while (typeof this.field[i] !== 'undefined') {
-            if         (i + this.fieldColumns - 1 >= 0 && this.field[i] === this.field[i + this.fieldColumns - 1]) {
+            if (i + this.fieldColumns - 1 >= 0 && this.field[i] === this.field[i + this.fieldColumns - 1]) {
                 counter++;
             } else {
                 counter = 0;
             }
-            if (counter === this.winNum - 1 && this.field[i] !== 0) {
+            if (counter === this.winNum - 1 && this.field[i] !== emptyCell) {
                 return true;
             }
             i += this.fieldColumns - 1;

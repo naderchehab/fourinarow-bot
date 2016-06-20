@@ -1,8 +1,11 @@
 'use strict';
 
 let fs = require('fs');
+let path = require('path');
 let _ = require('lodash');
 let Board = require('./board');
+
+let appDir = path.dirname(require.main.filename);
 
 class Bot {
     constructor(options) {
@@ -23,8 +26,8 @@ class Bot {
         }
     }
 
-    save(path, callback) {
-        fs.writeFile(path, JSON.stringify(this.states), (err) => {
+    save(p, callback) {
+        fs.writeFile(p, JSON.stringify(this.states), (err) => {
             if (err) {
                 return console.log(err);
             }
@@ -33,8 +36,8 @@ class Bot {
         });
     }
 
-    load(path) {
-        this.states = require('./' + path);
+    load(p) {
+        this.states = require(path.join(appDir, p));
     }
 
     getMove(board) {
@@ -50,7 +53,7 @@ class Bot {
 
         let bestState;
 
-        if (board.yourBotId === 1) {
+        if (board.yourBotId === board.player1Id) {
             bestState = _.maxBy(nextStates, s => this.states[s] && this.states[s].value);
         } else {
             bestState = _.minBy(nextStates, s => this.states[s] && this.states[s].value);
@@ -61,7 +64,6 @@ class Bot {
         }
 
         let move = Board.getMoveFromStateDiff(Board.getFieldArray(bestState), board.field, board.fieldColumns);
-
         return move;
     }
 
@@ -73,6 +75,7 @@ class Bot {
             this._recordState(board);
             board.nextPlayer();
         }
+        //console.log(this.states);
     }
 
     _play(board) {
@@ -96,7 +99,7 @@ class Bot {
         let hasWinner = board.checkWin();
 
         if (hasWinner) {
-            if (board.yourBotId === 1) {
+            if (board.yourBotId === this.player1Id) {
                 this.states[currentState].value = 100;
             } else {
                 this.states[currentState].value = -100;
@@ -107,9 +110,16 @@ class Bot {
         if (this.previousState) {
             this.states[this.previousState].visits++;
             this.states[this.previousState].value = this.states[this.previousState].value + (Bot.tdStepSize / this.states[this.previousState].visits) * (this.states[currentState].value - this.states[this.previousState].value);
+            /*if (this.previousState === 'A000102102' && this.states[this.previousState].visits < 20) {
+                console.log('AAAAAAAAA state:', this.previousState, 'value:', this.states[this.previousState].value, 'visits:', this.states[this.previousState].visits);
+            }
+
+            if (this.previousState === 'A200100102' && this.states[this.previousState].visits < 20) {
+                console.log('BBB state:', this.previousState, 'value:', this.states[this.previousState].value, 'visits:', this.states[this.previousState].visits);
+            }*/
         }
 
-        if (hasWinner || board.getLegalMoves().length === 0) {
+        if (hasWinner || board.checkDraw() === true) {
             board.gameEnded = true;
             this.previousState = undefined;
         } else {

@@ -1,6 +1,7 @@
 'use strict';
 
 let assert = require('assert');
+let _ = require('lodash');
 let Board = require('../').Board;
 
 let settings = {
@@ -8,7 +9,7 @@ let settings = {
     time_per_move: '500',
     player_names: 'player1,player2',
     your_bot: 'player1',
-    your_botid: '1',
+    your_botid: 'a',
     field_columns: '7',
     field_rows: '6'
 };
@@ -16,12 +17,12 @@ let settings = {
 describe('Board Test', function() {
     it('should get legal moves from current board', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         let legalMoves = board.getLegalMoves();
@@ -33,12 +34,12 @@ describe('Board Test', function() {
 
     it('should place disc for player', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         let column = 2;
@@ -59,14 +60,38 @@ describe('Board Test', function() {
         done();
     });
 
+    it('should clear the board', function(done) {
+        let field1 =
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
+
+        let field2 =
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,X,X,X,X';
+
+        let board1 = new Board(settings, 4, field1);
+        let board2 = new Board(settings, 4, field2);
+        board1.clear();
+        assert(_.isEqual(board1.field, board2.field));
+        done();
+    });
+
     it('should get the column from index', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         let column;
@@ -115,20 +140,20 @@ describe('Board Test', function() {
 
     it('should be able to get move from state diff', function(done) {
         let field1 =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let field2 =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,1,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,a,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board1 = new Board(settings, 4, field1);
         let board2 = new Board(settings, 4, field2);
@@ -140,89 +165,89 @@ describe('Board Test', function() {
 
     it('should be able to determine whether a row has four in a row', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,1,1,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,a,a,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,1,1,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,1,1,1';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,a,a,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,a,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,1,1,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,1,1,2';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,a,a,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,a,a,b';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,1,1,1,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,1,1,2';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,a,a,a,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,a,a,b';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
-            '1,1,1,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,1,1,0,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,1,1,2';
+            'a,a,a,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,a,a,X,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,a,a,b';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === true);
 
         field =
-            '1,1,1,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,1,1,0,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,1,1,2';
+            'a,a,a,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,a,a,X,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,a,a,b';
 
         board = new Board(settings, 4, field);
         assert(board._checkRows() === false);
@@ -232,78 +257,78 @@ describe('Board Test', function() {
 
     it('should be able to determine whether a column has four in a row', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,1;' +
-            '0,0,0,1,0,0,1;' +
-            '0,0,0,2,0,2,1;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,a;' +
+            'X,X,X,a,X,X,a;' +
+            'X,X,X,b,X,b,a;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,1;' +
-            '0,0,0,2,0,2,1;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,a;' +
+            'X,X,X,b,X,b,a;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === false);
 
         field =
-            '2,0,0,0,0,0,0;' +
-            '2,0,0,2,0,0,0;' +
-            '2,0,0,1,0,0,0;' +
-            '2,0,0,1,0,0,1;' +
-            '0,0,0,2,0,2,2;' +
-            '0,0,0,1,0,1,1';
+            'b,X,X,X,X,X,X;' +
+            'b,X,X,b,X,X,X;' +
+            'b,X,X,a,X,X,X;' +
+            'b,X,X,a,X,X,a;' +
+            'X,X,X,b,X,b,b;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,0,0,2,0,0,0;' +
-            '2,0,0,1,0,0,0;' +
-            '2,0,0,1,0,0,1;' +
-            '2,0,0,2,0,2,2;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'b,X,X,b,X,X,X;' +
+            'b,X,X,a,X,X,X;' +
+            'b,X,X,a,X,X,a;' +
+            'b,X,X,b,X,b,b;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '2,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,1;' +
-            '2,0,0,1,0,2,2;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'b,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,a;' +
+            'b,X,X,a,X,b,b;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkColumns() === true);
@@ -313,89 +338,89 @@ describe('Board Test', function() {
 
     it('should be able to determine whether a diagonal has four in a row', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,2,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,X,X,X,X;' +
+            'b,b,b,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,2,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,1,0,0;' +
-            '0,0,0,2,0,1,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,X,X,X,X;' +
+            'b,b,b,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,a,X,X;' +
+            'X,X,X,b,X,a,X;' +
+            'X,X,X,a,X,a,X';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,1,0,0;' +
-            '0,0,0,2,0,1,0;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'b,b,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,a,X,X;' +
+            'X,X,X,b,X,a,X;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,2,2,0,0,0;' +
-            '0,0,0,0,0,0,0;' +
-            '0,0,0,1,1,0,0;' +
-            '0,0,0,2,0,1,0;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'b,b,b,b,X,X,X;' +
+            'X,X,X,X,X,X,X;' +
+            'X,X,X,a,a,X,X;' +
+            'X,X,X,b,X,a,X;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === false);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,0,2,0,0,0;' +
-            '1,0,0,0,0,0,0;' +
-            '0,1,0,0,1,0,0;' +
-            '0,0,1,2,0,0,0;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'b,b,X,b,X,X,X;' +
+            'a,X,X,X,X,X,X;' +
+            'X,a,X,X,a,X,X;' +
+            'X,X,a,b,X,X,X;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         field =
-            '0,0,0,2,0,0,0;' +
-            '2,2,0,1,2,0,0;' +
-            '0,0,0,0,0,2,0;' +
-            '0,1,0,0,1,0,2;' +
-            '0,0,1,2,0,0,0;' +
-            '0,0,0,1,0,1,1';
+            'X,X,X,b,X,X,X;' +
+            'b,b,X,a,b,X,X;' +
+            'X,X,X,X,X,b,X;' +
+            'X,a,X,X,a,X,b;' +
+            'X,X,a,b,X,X,X;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
 
         field =
-            '0,0,0,0,0,0,0;' +
-            '2,2,2,2,0,0,0;' +
-            '0,0,0,0,1,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,1,2,0,1,0;' +
-            '0,1,0,1,0,1,1';
+            'X,X,X,X,X,X,X;' +
+            'b,b,b,b,X,X,X;' +
+            'X,X,X,X,a,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,a,b,X,a,X;' +
+            'X,a,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board._checkDiaglonals() === true);
@@ -405,34 +430,34 @@ describe('Board Test', function() {
 
     it('should be able to determine whether the board has a draw', function(done) {
         let field =
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,1,0,0,0;' +
-            '0,0,0,2,0,2,0;' +
-            '0,0,0,1,0,1,0';
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,a,X,X,X;' +
+            'X,X,X,b,X,b,X;' +
+            'X,X,X,a,X,a,X';
 
         let board = new Board(settings, 4, field);
         assert(board.checkDraw() === false);
 
         field =
-            '1,1,1,1,1,1,0;' +
-            '2,2,2,2,0,2,1;' +
-            '0,0,0,1,0,1,2;' +
-            '0,0,0,1,0,1,1;' +
-            '0,0,0,2,0,2,2;' +
-            '0,0,0,1,0,1,1';
+            'a,a,a,a,a,a,X;' +
+            'b,b,b,b,X,b,a;' +
+            'X,X,X,a,X,a,b;' +
+            'X,X,X,a,X,a,a;' +
+            'X,X,X,b,X,b,b;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board.checkDraw() === false);
 
         field =
-            '1,1,1,1,1,1,1;' +
-            '2,2,2,2,0,2,1;' +
-            '0,0,0,1,0,1,2;' +
-            '0,0,0,1,0,1,1;' +
-            '0,0,0,2,0,2,2;' +
-            '0,0,0,1,0,1,1';
+            'a,a,a,a,a,a,a;' +
+            'b,b,b,b,X,b,a;' +
+            'X,X,X,a,X,a,b;' +
+            'X,X,X,a,X,a,a;' +
+            'X,X,X,b,X,b,b;' +
+            'X,X,X,a,X,a,a';
 
         board = new Board(settings, 4, field);
         assert(board.checkDraw() === true);
